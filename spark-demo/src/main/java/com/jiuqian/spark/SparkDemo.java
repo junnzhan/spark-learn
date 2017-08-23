@@ -20,8 +20,7 @@ public class SparkDemo {
 		SparkConf conf = new SparkConf().setAppName("WordCount").setMaster("local");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 
-		// JavaRDD<String> lines = sc.textFile("F:\\work\\demo.txt");
-		JavaRDD<String> lines = sc.textFile("hdfs://192.168.0.61:9000/user/zj/data/text/words");
+		JavaRDD<String> lines = sc.textFile("hdfs://192.168.0.61:9000/user/data/text/words");
 		JavaRDD<String> words = lines.flatMap(new FlatMapFunction<String, String>() {
 
 			private static final long serialVersionUID = 4868209367128242219L;
@@ -40,7 +39,7 @@ public class SparkDemo {
 			}
 		});
 
-		JavaPairRDD<String, Integer> wordsCount = pairs.reduceByKey(new Function2<Integer, Integer, Integer>() { // 对相同的Key，进行Value的累计（包括Local和Reducer级别同时Reduce）
+		JavaPairRDD<String, Integer> wordsCount = pairs.reduceByKey(new Function2<Integer, Integer, Integer>() { 
 
 			private static final long serialVersionUID = -7084745825065644275L;
 
@@ -61,7 +60,7 @@ public class SparkDemo {
 			}
 		});
 		
-		// wordsCount.saveAsTextFile("hdfs://192.168.0.61:9000/user/zj/data/text/output/");
+		// wordsCount.saveAsTextFile("hdfs://192.168.0.61:9000/user/data/text/output/");
 		sc.close();
 	}
 }
